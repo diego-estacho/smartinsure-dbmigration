@@ -1,0 +1,30 @@
+# Aplicação de migrations por ambiente (ADR-041): push em migrations/** nas
+# branches develop/qa/master aplica no banco do ambiente correspondente.
+# Secrets (FLYWAY_URL/USER/PASSWORD) vivem no GitHub Environment de cada branch.
+name: migrations
+
+on:
+  push:
+    branches: [develop, qa, master]
+    paths:
+      - "migrations/**"
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    environment: ${{ github.ref_name == 'master' && 'producao' || github.ref_name }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Aplicar migrations (Flyway)
+        # ADR-042: outOfOrder=false também no comando do CI, não só no flyway.conf.
+        run: >
+          docker run --rm
+          -v "${{ github.workspace }}/migrations:/flyway/sql:ro"
+          redgate/flyway
+          -url="${{ secrets.FLYWAY_URL }}"
+          -user="${{ secrets.FLYWAY_USER }}"
+          -password="${{ secrets.FLYWAY_PASSWORD }}"
+          -outOfOrder=false
+          -validateMigrationNaming=true
+          migrate

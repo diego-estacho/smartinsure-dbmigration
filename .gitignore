@@ -1,0 +1,9 @@
+# Secrets e configuração local — nunca versionados (ADR-054)
+*.local.conf
+.env
+
+# Artefatos do Flyway
+.flyway/
+flyway.log
+report.html
+report.json

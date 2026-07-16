@@ -50,4 +50,9 @@ BEGIN
     );
 
     CREATE INDEX IX_PersonAddresses_PersonId ON dbo.PersonAddresses (PersonId);
+
+    -- RN-014: no máximo um endereço principal por Pessoa.
+    CREATE UNIQUE INDEX UX_PersonAddresses_MainAddress
+        ON dbo.PersonAddresses (PersonId)
+        WHERE IsMain = 1;
 END

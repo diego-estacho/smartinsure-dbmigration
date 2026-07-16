@@ -1,5 +1,5 @@
--- RN-005..RN-008 (regras-de-negocio/seguradoras.md): tabela Insurers (ADR-058: artefatos em inglês).
--- Espelha o mapping EF InsurerMapping do backend (mesma janela de release); CNPJ único (RN-005).
+-- RN-007..RN-010 (regras-de-negocio/seguradoras.md): tabela Insurers (ADR-058: artefatos em inglês).
+-- Espelha o mapping EF InsurerMapping do backend (mesma janela de release); CNPJ único (RN-007).
 IF OBJECT_ID(N'dbo.Insurers', N'U') IS NULL
 BEGIN
     CREATE TABLE dbo.Insurers

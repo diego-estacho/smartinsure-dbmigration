@@ -9,7 +9,7 @@ BEGIN
         DocumentNumber  NVARCHAR(14)     NOT NULL,
         Name            NVARCHAR(200)    NOT NULL,
         SocialName      NVARCHAR(200)    NULL,
-        Type            NVARCHAR(20)     NOT NULL,
+        Type            NVARCHAR(1)      NOT NULL,
         LegalNatureId   UNIQUEIDENTIFIER NULL,
         CreatedAt       DATETIME2        NOT NULL,
         CreatedBy       NVARCHAR(100)    NOT NULL,

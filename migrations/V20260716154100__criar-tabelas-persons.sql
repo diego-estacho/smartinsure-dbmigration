@@ -1,11 +1,11 @@
--- RN-013/RN-014/RN-016 (regras-de-negocio/pessoas.md): Pessoa Jurídica única por CNPJ,
--- importada do Birô com endereço principal. Espelha os mappings EF LegalEntityMapping e
--- LegalEntityAddressMapping do backend (mesma janela de release).
-IF OBJECT_ID(N'dbo.LegalEntities', N'U') IS NULL
+-- RN-013/RN-014/RN-016 (regras-de-negocio/pessoas.md): Pessoa única por CNPJ,
+-- importada do Birô com endereço principal. Espelha os mappings EF PersonMapping e
+-- PersonAddressMapping do backend (mesma janela de release).
+IF OBJECT_ID(N'dbo.Persons', N'U') IS NULL
 BEGIN
-    CREATE TABLE dbo.LegalEntities
+    CREATE TABLE dbo.Persons
     (
-        Id             UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_LegalEntities PRIMARY KEY,
+        Id             UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_Persons PRIMARY KEY,
         Cnpj           NVARCHAR(14)     NOT NULL,
         CorporateName  NVARCHAR(200)    NOT NULL,
         TradeName      NVARCHAR(200)    NULL,
@@ -15,23 +15,23 @@ BEGIN
         UpdatedAt      DATETIME2        NULL,
         UpdatedBy      NVARCHAR(100)    NULL,
 
-        CONSTRAINT FK_LegalEntities_LegalNatures FOREIGN KEY (LegalNatureId)
+        CONSTRAINT FK_Persons_LegalNatures FOREIGN KEY (LegalNatureId)
             REFERENCES dbo.LegalNatures (Id)
     );
 
     -- RN-013/RN-014: uma Pessoa Jurídica por CNPJ.
-    CREATE UNIQUE INDEX IX_LegalEntities_Cnpj ON dbo.LegalEntities (Cnpj);
+    CREATE UNIQUE INDEX IX_Persons_Cnpj ON dbo.Persons (Cnpj);
 
     -- RN-013: busca por "contém" em razão social e nome fantasia.
-    CREATE INDEX IX_LegalEntities_CorporateName ON dbo.LegalEntities (CorporateName);
+    CREATE INDEX IX_Persons_CorporateName ON dbo.Persons (CorporateName);
 END
 
-IF OBJECT_ID(N'dbo.LegalEntityAddresses', N'U') IS NULL
+IF OBJECT_ID(N'dbo.PersonAddresses', N'U') IS NULL
 BEGIN
-    CREATE TABLE dbo.LegalEntityAddresses
+    CREATE TABLE dbo.PersonAddresses
     (
-        Id             UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_LegalEntityAddresses PRIMARY KEY,
-        LegalEntityId  UNIQUEIDENTIFIER NOT NULL,
+        Id             UNIQUEIDENTIFIER NOT NULL CONSTRAINT PK_PersonAddresses PRIMARY KEY,
+        PersonId  UNIQUEIDENTIFIER NOT NULL,
         ZipCode        NVARCHAR(8)      NULL,
         Street         NVARCHAR(200)    NULL,
         Number         NVARCHAR(20)     NULL,
@@ -45,9 +45,9 @@ BEGIN
         UpdatedAt      DATETIME2        NULL,
         UpdatedBy      NVARCHAR(100)    NULL,
 
-        CONSTRAINT FK_LegalEntityAddresses_LegalEntities FOREIGN KEY (LegalEntityId)
-            REFERENCES dbo.LegalEntities (Id)
+        CONSTRAINT FK_PersonAddresses_Persons FOREIGN KEY (PersonId)
+            REFERENCES dbo.Persons (Id)
     );
 
-    CREATE INDEX IX_LegalEntityAddresses_LegalEntityId ON dbo.LegalEntityAddresses (LegalEntityId);
+    CREATE INDEX IX_PersonAddresses_PersonId ON dbo.PersonAddresses (PersonId);
 END

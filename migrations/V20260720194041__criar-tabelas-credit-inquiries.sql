@@ -45,7 +45,11 @@ BEGIN
         CreatedAt           DATETIME2        NOT NULL,
         CreatedBy           NVARCHAR(100)    NOT NULL,
         UpdatedAt           DATETIME2        NULL,
-        UpdatedBy           NVARCHAR(100)    NULL
+        UpdatedBy           NVARCHAR(100)    NULL,
+
+        -- RN-030/RN-031: resultado indisponível sempre carrega o motivo
+        CONSTRAINT CK_CreditInquiryResults_UnavailableReason
+            CHECK (Status <> 'Unavailable' OR FailureReason IS NOT NULL)
     );
 
     -- Uma Seguradora aparece uma única vez por consulta

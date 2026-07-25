@@ -1,4 +1,4 @@
--- RN-034 (regras-de-negocio/corretoras.md): os dados de contato complementares da Corretora
+-- RN-054 (regras-de-negocio/corretoras.md): os dados de contato complementares da Corretora
 -- (e-mail, telefone e responsável) moram no vínculo PersonRole do papel Corretor, como a
 -- situação Ativa/Inativa já mora (RN-018/RN-021). Nulos para os demais papéis da Pessoa.
 -- Espelha o mapping EF PersonRoleMapping do backend (mesma janela de release).

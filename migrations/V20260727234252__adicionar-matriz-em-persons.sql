@@ -1,6 +1,7 @@
 -- RN-052 (regras-de-negocio/tomadores.md) — Filial do Tomador.
 -- ADR-063: a Filial é uma Pessoa jurídica como qualquer outra; o vínculo com a matriz é persistido
 -- (não derivado por raiz de CNPJ). Matriz tem HeadquartersPersonId NULL. Sem backfill.
+-- Batch separado por GO: a coluna nova só é referenciável por índice no batch seguinte.
 
 SET QUOTED_IDENTIFIER ON;
 
@@ -12,7 +13,8 @@ BEGIN
 END
 GO
 
-IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Persons_HeadquartersPersonId')
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Persons_HeadquartersPersonId'
+                AND object_id = OBJECT_ID(N'dbo.Persons'))
 BEGIN
     CREATE INDEX IX_Persons_HeadquartersPersonId
         ON dbo.Persons (HeadquartersPersonId)

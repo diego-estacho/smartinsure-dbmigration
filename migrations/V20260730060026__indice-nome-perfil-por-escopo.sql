@@ -7,10 +7,9 @@
 --   PolicyHolder  → nome único dentro do mesmo Tomador (e entre os globais de Tomador)
 -- Perfil global de Escopo Corretora/Tomador tem dono NULL: cai no índice do próprio tipo, com
 -- BrokerageId/PolicyHolderId como coluna do índice — dois globais não repetem nome.
--- QUOTED_IDENTIFIER ON é exigido pelo SQL Server para criar índice FILTRADO; sem isso o CREATE
--- falha com "SET options have incorrect settings" (o padrão do sqlcmd vem OFF).
-SET QUOTED_IDENTIFIER ON;
-GO
+-- Nota de operação: índice FILTRADO exige QUOTED_IDENTIFIER ON. O driver JDBC usado pelo Flyway
+-- já conecta com essa opção ligada, então o CI aplica sem ajuste. Aplicação manual por sqlcmd
+-- precisa do flag `-I` — sem ele o CREATE falha com "SET options have incorrect settings".
 IF EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Profiles_Name' AND object_id = OBJECT_ID(N'dbo.Profiles'))
 BEGIN
     DROP INDEX IX_Profiles_Name ON dbo.Profiles;
